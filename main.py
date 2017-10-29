@@ -15,12 +15,13 @@ def isPrime(number):
     while divisor < number:
         if (number % divisor) == 0:
             return False
+        divisor += 1
     return True
 
 
 def getPrimeNumber():
     while True:
-        prime = random.randint(2, 1000)
+        prime = random.randint(2, 10)
         if isPrime(prime):
             return prime
 
@@ -36,18 +37,30 @@ def string2integer(string):
     return int(result)
 
 
-
-
+def integer2string(integer):
+    integer = str(integer)
+    print(integer)
+    result = ''
+    for i in integer:
+        value = int(i)+90
+        c = chr(value)
+        result += c
+    print(result)
+    return result
 
 def getKeys():
-    prime1 = getPrimeNumber()
-    prime2 = getPrimeNumber()
+    #prime1 = getPrimeNumber()
+    #prime2 = getPrimeNumber()
+    prime1 = 3
+    prime2 = 11
     n = prime1 * prime2
     z = (prime1 - 1) * (prime2 - 1)
-    e = getE(z)
-    d = getD(e, z)
-    publicKey = [e, z]
-    privateKey = [d, z]
+    #e = getE(z)
+    e = 7
+    #d = getD(e, z)
+    d = 3
+    publicKey = [e, n]
+    privateKey = [d, n]
 
     return publicKey,privateKey
 
@@ -58,13 +71,20 @@ def encryptMessageRSA(message):
     :return: returns the message encrypted in integers and public key [e,n]
     '''
     publicKey, privateKey = getKeys()
-    msg = string2integer(message)
-    encryptedMsg = ((msg**publicKey[0])%publicKey[1])
+    #msg = string2integer(message)
+    msg = message
+    n1 = msg**publicKey[0]
+    encryptedMsg = n1%publicKey[1]
+    #encryptedMsg = ((msg**publicKey[0])%publicKey[1])
     return encryptedMsg,privateKey
 
 
 def decryptMessageRSA(encryptedMsg,privateKey):
-    originalMsgInt = ((encryptedMsg**privateKey[0])%privateKey[1])
+    #originalMsgInt = ((encryptedMsg**privateKey[0])%privateKey[1])
+    n1 = encryptedMsg**privateKey[0]
+    originalMsgInt = n1%privateKey[1]
+    #originalmsg = integer2string(originalMsgInt)
+    return originalMsgInt
 
 
 
@@ -90,6 +110,20 @@ def getD(e,z):
         if (d*e)%z == 1:
             return d
         d+= 1
+
+def RSAmain():
+    while True:
+        try:
+            msg = int(input('Digite: '))
+            break
+        except:
+            continue
+
+    print(msg)
+    e,pk = encryptMessageRSA(msg)
+    omsg = decryptMessageRSA(e,pk)
+    print(omsg)
+
 
 def RSA():
     p = 3
@@ -118,6 +152,4 @@ def RSA():
     return 0
 
 
-
-#RSA()
-print(string2integer('ab'))
+RSAmain()
