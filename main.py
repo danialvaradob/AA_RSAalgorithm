@@ -28,9 +28,11 @@ def getPrimeNumber():
 
 def string2integer(string):
     result = ''
+    print(string)
     for i in string:
         value = ord(i) - 90
         result += str(value)
+    print(result)
     return int(result)
 
 
@@ -63,7 +65,7 @@ def encryptMessageRSA(message):
 
 def decryptMessageRSA(encryptedMsg,privateKey):
     originalMsgInt = ((encryptedMsg**privateKey[0])%privateKey[1])
-    
+
 
 
 def getE(z):
