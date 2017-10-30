@@ -1,9 +1,9 @@
 import random
 
-from math import gcd as bltin_gcd
+from math import gcd
 
 def isCoprime(a, b):
-    return bltin_gcd(a, b) == 1
+    return gcd(a, b) == 1
 
 def isPrime(number):
     divisor = 2
@@ -17,6 +17,15 @@ def getCoprime(n,z):
     while True:
         coprime = random.randint(2,z-1)
         if isCoprime(coprime,n) and isPrime(coprime):
+            print("\nthe CoPrime number is:",coprime)
+            return coprime
+        coprime += 1
+
+def getCoprime2(n,z):
+    coprime = 2
+    while coprime<z:
+        if isCoprime(coprime,n) and isPrime(coprime):
+            print("\nthe CoPrime number is:",coprime)
             return coprime
         coprime += 1
 
@@ -31,29 +40,48 @@ def getD(e,z):
     while True:
         x = (d*e)%z
         if x == 1 and isPrime(d):
+            print("\nD is:",d)
             return d
         d+= 1
+
+
+def getD2(e,z):
+    '''
+    Returns the private key D
+    :param e: the coprime number and also PUBLIC KEY
+    :param z: Constant
+    :return: return private key D
+    '''
+    d = 1
+    while d<z:
+        x = (d*e)%z
+        if x == 1 and isPrime(d):
+            print("\nD is:",d)
+            return d
+        d+= 1
+
+
 
 def RSA():
     p = 3
     q = 11
     #working with 3 and 11
-    '''
-    p = getPrimeNumber()
-    while True:
-        q = getPrimeNumber()
-        if q != p:
-            break
-    '''
+    #p = getPrimeNumber()
+    #while True:
+    #    q = getPrimeNumber()
+    #    if q != p:
+    #        break
+
     n = p * q
     z = (p - 1) * (q - 1)
     #e = getCoprime(n,z)
     e = 7
-    if bltin_gcd(e,n) == 1:
-        print('Es coprimo')
-    d = getD(e,z)
+    #if gcd(e,n) == 1:
+    #    print('Es coprimo')
+    #d = getD(e,z)
     # Message to be encrypted
-    msg = 762312
+    d = 3
+    msg = 89
     print("\nMessage = ", msg)
     c = msg**e
     c = c % n
@@ -62,8 +90,26 @@ def RSA():
     m = m % n
     print("\nOriginal Message Sent = ", m)
 
-    return 0
-
+def RSA1():
+    #p = 547
+    #q = 557
+    #p = 53
+    #q = 59
+    p = 179425579
+    q = 179426549
+    n = p*q
+    z = (p-1)*(q-1)
+    e = 3
+    #e = getCoprime2(n,z)
+    d = getD2(e,z)
+    #e = 3
+    #d = 2011
+    msg = 3126
+    print("\nMessage = ", msg)
+    encryptedData = (msg**e)%n
+    print("\nEncrypted data =", encryptedData)
+    decryptedData = ((encryptedData)**d)%n
+    print("\nOriginal Message Sent = ", decryptedData)
 
 
 ####################################################################################################################
@@ -95,7 +141,7 @@ def gcd(a, h):
 
 def getPrimeNumber():
     while True:
-        prime = random.randint(2, 10)
+        prime = random.randint(100,100000)
         if isPrime(prime):
             return prime
 
