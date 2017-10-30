@@ -1,5 +1,86 @@
 import random
 
+from math import gcd as bltin_gcd
+
+def isCoprime(a, b):
+    return bltin_gcd(a, b) == 1
+
+def isPrime(number):
+    divisor = 2
+    while divisor < number:
+        if (number % divisor) == 0:
+            return False
+        divisor += 1
+    return True
+
+def getCoprime(n,z):
+    while True:
+        coprime = random.randint(2,z-1)
+        if isCoprime(coprime,n) and isPrime(coprime):
+            return coprime
+        coprime += 1
+
+def getD(e,z):
+    '''
+    Returns the private key D
+    :param e: the coprime number and also PUBLIC KEY
+    :param z: Constant
+    :return: return private key D
+    '''
+    d = 1
+    while True:
+        x = (d*e)%z
+        if x == 1 and isPrime(d):
+            return d
+        d+= 1
+
+def RSA():
+    p = 3
+    q = 11
+    #working with 3 and 11
+    '''
+    p = getPrimeNumber()
+    while True:
+        q = getPrimeNumber()
+        if q != p:
+            break
+    '''
+    n = p * q
+    z = (p - 1) * (q - 1)
+    #e = getCoprime(n,z)
+    e = 7
+    if bltin_gcd(e,n) == 1:
+        print('Es coprimo')
+    d = getD(e,z)
+    # Message to be encrypted
+    msg = 762312
+    print("\nMessage = ", msg)
+    c = msg**e
+    c = c % n
+    print("\nEncrypted data =", c)
+    m = c**d
+    m = m % n
+    print("\nOriginal Message Sent = ", m)
+
+    return 0
+
+
+
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
+####################################################################################################################
 
 def gcd(a, h):
     while True:
@@ -10,13 +91,6 @@ def gcd(a, h):
         h = temp
 
 
-def isPrime(number):
-    divisor = 2
-    while divisor < number:
-        if (number % divisor) == 0:
-            return False
-        divisor += 1
-    return True
 
 
 def getPrimeNumber():
@@ -49,16 +123,16 @@ def integer2string(integer):
     return result
 
 def getKeys():
-    #prime1 = getPrimeNumber()
-    #prime2 = getPrimeNumber()
-    prime1 = 3
-    prime2 = 11
+    prime1 = getPrimeNumber()
+    prime2 = getPrimeNumber()
+    #prime1 = 3
+    #prime2 = 11
     n = prime1 * prime2
     z = (prime1 - 1) * (prime2 - 1)
-    #e = getE(z)
-    e = 7
-    #d = getD(e, z)
-    d = 3
+    e = getE(z)
+    #e = 7
+    d = getD(e, z)
+    #d = 3
     publicKey = [e, n]
     privateKey = [d, n]
 
@@ -75,6 +149,7 @@ def encryptMessageRSA(message):
     msg = message
     n1 = msg**publicKey[0]
     encryptedMsg = n1%publicKey[1]
+    print("Message Encrypted",encryptedMsg)
     #encryptedMsg = ((msg**publicKey[0])%publicKey[1])
     return encryptedMsg,privateKey
 
@@ -98,34 +173,24 @@ def getE(z):
     return e
 
 
-def getD(e,z):
-    '''
-    Returns the private key D
-    :param e: the coprime number and also PUBLIC KEY
-    :param z: Constant
-    :return: return private key D
-    '''
-    d = 1
-    while True:
-        if (d*e)%z == 1:
-            return d
-        d+= 1
 
 def RSAmain():
+    '''
     while True:
         try:
             msg = int(input('Digite: '))
             break
         except:
             continue
-
+    '''
+    msg = 2
     print(msg)
     e,pk = encryptMessageRSA(msg)
     omsg = decryptMessageRSA(e,pk)
     print(omsg)
 
 
-def RSA():
+def RSA2():
     p = 3
     q = 7
     n = p * q
@@ -141,7 +206,8 @@ def RSA():
     d = (1 + (k * z)) / e
 
     # Message to be encrypted
-    msg = 22
+    msg = 18
+    print("\nMessage = ", msg)
     c = msg**e
     c = c % n
     print("\nEncrypted data =", c)
@@ -152,4 +218,4 @@ def RSA():
     return 0
 
 
-RSAmain()
+RSA()
