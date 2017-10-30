@@ -99,6 +99,8 @@ of this e
 '''
 def getED(n,z):
     e = 2
+    # This loop makes sure that the coprime generated (e)
+    # also has a multiplicative inverse ((d*1)mod phi = 1 )
     while True:
         e = get_coprime(n,z,e)
         d = modinv(e, z)
@@ -109,36 +111,23 @@ def getED(n,z):
 
 
 def generate_keypair(p, q):
-    if not (is_prime(p) and is_prime(q)):
-        raise ValueError('Both numbers must be prime.')
-    elif p == q:
-        raise ValueError('p and q cannot be equal')
-    # n = pq
+    # p and q should be not equal, prime numbers
     n = p * q
 
     # Phi is the totient of n
     phi = (p - 1) * (q - 1)
-    '''
-    # Choose an integer e such that e and phi(n) are coprime
-    e = random.randrange(1, phi)
 
-    # Use Euclid's Algorithm to verify that e and phi(n) are comprime
-    g = gcd(e, phi)
-    while g != 1:
-        e = random.randrange(1, phi)
-        g = gcd(e, phi)
-
-    # Use Extended Euclid's Algorithm to generate the private key
-    d = multiplicative_inverse(e, phi)
-    '''
+    # Get e and integer thats coprime to phi
+    # Use Euclid's Algorithm to generate the private key
     e,d = getED(n,phi)
+
     # Return public and private keypair
     # Public key is (e, n) and private key is (d, n)
     return ((e, n), (d, n))
 
 
 def encrypt(pk, plaintext):
-    # Unpack the key into it's components
+    # Unpack the key into its components
     key, n = pk
     # Convert each letter in the plaintext to numbers based on the character using a^b mod m
     cipher = [(ord(char) ** key) % n for char in plaintext]
@@ -156,11 +145,7 @@ def decrypt(pk, ciphertext):
 
 
 if __name__ == '__main__':
-    '''
-    Detect if the script is being run directly by the user
-    '''
-    print
-    "RSA Encrypter/ Decrypter"
+    print("RSA Encrypter/ Decrypter")
     p = 53
     q = 61
     print("Generating your public/private keypairs now . . .")
