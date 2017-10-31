@@ -133,7 +133,8 @@ def encrypt(pk, plaintext):
     # Unpack the key into its components
     key, n = pk
     # Convert each letter in the plaintext to numbers based on the character using a^b mod m
-    cipher = [(ord(char) ** key) % n for char in plaintext]
+    #cipher = [(ord(char) ** key) % n for char in plaintext]
+    cipher = [(10**key)%n]
     # Return the array of bytes
     return cipher
 
@@ -142,6 +143,7 @@ def decrypt(pk, ciphertext):
     # Unpack the key into its components
     key, n = pk
     # Generate the plaintext based on the ciphertext and key using a^b mod m
+    print("Original MESSAGE:",(ciphertext[0]**key)%n)
     plain = [chr((char ** key) % n) for char in ciphertext]
     # Return the array of bytes as a string
     return ''.join(plain)
@@ -157,11 +159,10 @@ if __name__ == '__main__':
     print("TIME STARTED:", datetime.datetime.now().time())
     print(datetime.datetime.now().time())
     print("RSA Encrypter/ Decrypter")
-    p = 53
+    p = 
     q = 61
     #message = input("Enter a message to encrypt with your private key: ")
-    message = "Message sent so the experiment can be made, there should be more bytes.\
-               47 bytes is not enough.five.Message sent so the experiment can be made, there should be more bytes. 47 bytes is not enough.five."
+    message = "Hi"
     print("My original message is:",message)
     print("Generating your public/private keypairs now . . .")
     public, private = generate_keypair(p, q)
