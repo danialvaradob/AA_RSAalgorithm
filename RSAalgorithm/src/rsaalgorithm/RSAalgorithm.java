@@ -44,7 +44,7 @@ public class RSAalgorithm {
                         //System.out.println(millis);
 			System.out.println("-------GENRATE PUBLIC and PRIVATE KEY-------------");
 			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-			keyPairGenerator.initialize(2048); //1024 used for normal securities
+			keyPairGenerator.initialize(2048); //1024 used for normal securitie
 			KeyPair keyPair = keyPairGenerator.generateKeyPair();
 			PublicKey publicKey = keyPair.getPublic();
 			PrivateKey privateKey = keyPair.getPrivate();
@@ -68,12 +68,12 @@ public class RSAalgorithm {
 			rsaObj.saveKeys(PRIVATE_KEY_FILE, rsaPrivKeySpec.getModulus(), rsaPrivKeySpec.getPrivateExponent());
 			
 			//Encrypt Data using Public Key
-			/*
+			
                         byte[] encryptedData = rsaObj.encryptData("Daniel Alvarado BonillaDaniel Alvarado BonillaDaniel Alvarado BonillaDaniel Alvarado Bonilla"
                                 + "Daniel Alvarado BonillaDaniel Alvarado BonillaDaniel Alvarado BonillaDaniel Alvarado Bonillao BonillaDaniel Alvarado Bonilla"
                                 + "Daniel Alvarado BonillaDaniel");
-                        */
-                        byte[] encryptedData = rsaObj.encryptData("Daniel Alvarado Bonilla");
+                        
+                        //byte[] encryptedData = rsaObj.encryptData("Daniel Alvarado Bonilla");
                         //Descypt Data using Private Key
 			rsaObj.decryptData(encryptedData);
                         //DateFormat dateFormat2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
