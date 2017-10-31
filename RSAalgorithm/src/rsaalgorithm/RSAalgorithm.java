@@ -17,6 +17,9 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.crypto.Cipher;
 
 //package rsaalgorithm;
@@ -34,6 +37,11 @@ public class RSAalgorithm {
 	public static void main(String[] args) throws IOException {
 
 		try {
+                        //DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        //Date date = new Date();
+                        //System.out.println(dateFormat.format(date)); 
+                        long millis = System.currentTimeMillis();
+                        //System.out.println(millis);
 			System.out.println("-------GENRATE PUBLIC and PRIVATE KEY-------------");
 			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
 			keyPairGenerator.initialize(2048); //1024 used for normal securities
@@ -60,10 +68,20 @@ public class RSAalgorithm {
 			rsaObj.saveKeys(PRIVATE_KEY_FILE, rsaPrivKeySpec.getModulus(), rsaPrivKeySpec.getPrivateExponent());
 			
 			//Encrypt Data using Public Key
-			byte[] encryptedData = rsaObj.encryptData("Daniel Alvarado");
-			
-			//Descypt Data using Private Key
+			/*
+                        byte[] encryptedData = rsaObj.encryptData("Daniel Alvarado BonillaDaniel Alvarado BonillaDaniel Alvarado BonillaDaniel Alvarado Bonilla"
+                                + "Daniel Alvarado BonillaDaniel Alvarado BonillaDaniel Alvarado BonillaDaniel Alvarado Bonillao BonillaDaniel Alvarado Bonilla"
+                                + "Daniel Alvarado BonillaDaniel");
+                        */
+                        byte[] encryptedData = rsaObj.encryptData("Daniel Alvarado Bonilla");
+                        //Descypt Data using Private Key
 			rsaObj.decryptData(encryptedData);
+                        //DateFormat dateFormat2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        //Date date2 = new Date();
+                        //System.out.println(dateFormat.format(date)); 
+                        long millis2 = System.currentTimeMillis();
+                        long m = millis2 - millis;
+                       System.out.println(m);
 			
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();

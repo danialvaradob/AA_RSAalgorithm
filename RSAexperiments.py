@@ -134,7 +134,7 @@ def encrypt(pk, plaintext):
     key, n = pk
     # Convert each letter in the plaintext to numbers based on the character using a^b mod m
     cipher = [(ord(char) ** key) % n for char in plaintext]
-    #cipher = [(10**key)%n]
+    #cipher = [(1256**key)%n]
     # Return the array of bytes
     return cipher
 
@@ -156,12 +156,17 @@ def utf8len(s):
 
 if __name__ == '__main__':
     print("TIME STARTED:", datetime.datetime.now().time())
-    print(datetime.datetime.now().time())
+    start = datetime.datetime.now()
     print("RSA Encrypter/ Decrypter")
-    p = 6073
-    q = 2371
+    #p = 6073
+    #q = 2371
+    p = 821
+    q = 811
     #message = input("Enter a message to encrypt with your private key: ")
-    message = "aaa"
+    #message = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    #message = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    message = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
     print("My original message is:",message)
     print("Generating your public/private keypairs now . . .")
     public, private = generate_keypair(p, q)
@@ -174,6 +179,10 @@ if __name__ == '__main__':
     print("Your message is:")
     print(decrypt(public, encrypted_msg))
     print("TIME FINISHED:",datetime.datetime.now().time())
+    end = (datetime.datetime.now()) - start
+
+    print("Microseconds:",end.microseconds)
+    print("Seconds:",end.seconds)
 
 
 
