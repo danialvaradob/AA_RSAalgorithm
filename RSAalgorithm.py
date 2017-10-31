@@ -100,13 +100,14 @@ def is_prime(num):
 Gets the integer e, thats coprime with n and the multiplicative inverse
 of this e
 '''
-def getED(n,z):
-    e = 2
+def getED(n,phi):
+    e = 3
     # This loop makes sure that the coprime generated (e)
     # also has a multiplicative inverse ((d*1)mod phi = 1 )
     while True:
-        e = get_coprime(n,z,e)
-        d = modinv(e, z)
+        e = get_coprime(n,phi,e)
+        d2 = multiplicative_inverse(e,phi)
+        d = modinv(e, phi)
         if d != None:
             return e,d
         e+=1

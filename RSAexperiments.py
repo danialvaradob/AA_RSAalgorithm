@@ -133,8 +133,8 @@ def encrypt(pk, plaintext):
     # Unpack the key into its components
     key, n = pk
     # Convert each letter in the plaintext to numbers based on the character using a^b mod m
-    #cipher = [(ord(char) ** key) % n for char in plaintext]
-    cipher = [(10**key)%n]
+    cipher = [(ord(char) ** key) % n for char in plaintext]
+    #cipher = [(10**key)%n]
     # Return the array of bytes
     return cipher
 
@@ -143,7 +143,6 @@ def decrypt(pk, ciphertext):
     # Unpack the key into its components
     key, n = pk
     # Generate the plaintext based on the ciphertext and key using a^b mod m
-    print("Original MESSAGE:",(ciphertext[0]**key)%n)
     plain = [chr((char ** key) % n) for char in ciphertext]
     # Return the array of bytes as a string
     return ''.join(plain)
@@ -159,10 +158,10 @@ if __name__ == '__main__':
     print("TIME STARTED:", datetime.datetime.now().time())
     print(datetime.datetime.now().time())
     print("RSA Encrypter/ Decrypter")
-    p = 
-    q = 61
+    p = 6073
+    q = 2371
     #message = input("Enter a message to encrypt with your private key: ")
-    message = "Hi"
+    message = "aaa"
     print("My original message is:",message)
     print("Generating your public/private keypairs now . . .")
     public, private = generate_keypair(p, q)
@@ -175,3 +174,54 @@ if __name__ == '__main__':
     print("Your message is:")
     print(decrypt(public, encrypted_msg))
     print("TIME FINISHED:",datetime.datetime.now().time())
+
+
+
+
+''' 
+First Time: HI
+TIME STARTED: 19:22:54.737357
+19:22:54.737402
+RSA Encrypter/ Decrypter
+My original message is: a
+Generating your public/private keypairs now . . .
+Your public key is  (7, 14399083)  and your private key is  (8223223, 14399083)
+Number of bytes in the message: 1
+Your encrypted message is: 
+26144
+Decrypting message with public key  (7, 14399083)  . . .
+Your message is:
+a
+TIME FINISHED: 19:23:22.755519
+
+TIME STARTED: 21:05:44.725552
+21:05:44.725597
+RSA Encrypter/ Decrypter
+My original message is: aa
+Generating your public/private keypairs now . . .
+Your public key is  (7, 14399083)  and your private key is  (8223223, 14399083)
+Number of bytes in the message: 2
+Your encrypted message is: 
+2614426144
+Decrypting message with public key  (7, 14399083)  . . .
+Your message is:
+aa
+TIME FINISHED: 21:06:40.742093
+
+TIME STARTED: 21:07:40.114061
+21:07:40.114105
+RSA Encrypter/ Decrypter
+My original message is: aaa
+Generating your public/private keypairs now . . .
+Your public key is  (7, 14399083)  and your private key is  (8223223, 14399083)
+Number of bytes in the message: 3
+Your encrypted message is: 
+261442614426144
+Decrypting message with public key  (7, 14399083)  . . .
+Your message is:
+aaa
+TIME FINISHED: 21:09:19.062076
+
+
+
+'''
