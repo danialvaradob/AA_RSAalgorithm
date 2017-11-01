@@ -267,8 +267,10 @@ def decrypt(pk, ciphertext):
     # Generate the plaintext based on the ciphertext and key using a^b mod m
     '''modExp(a, d, n):
         returns a ** d (mod n)     ---->    mod(char,key,n) '''
-    plain = [chr(modExp(char,key,n)) for char in ciphertext]
-
+    #plain = [chr(modExp(char,key,n)) for char in ciphertext]
+    plain = []
+    for char in ciphertext:
+        plain.append(chr((char ** key) % n))
     #plain = [chr((char ** key) % n) for char in ciphertext]
     # Return the array of bytes as a string
     return ''.join(plain)

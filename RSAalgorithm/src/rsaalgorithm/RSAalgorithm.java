@@ -33,7 +33,7 @@ public class RSAalgorithm {
 
    private static final String PUBLIC_KEY_FILE = "Public.key";
 	private static final String PRIVATE_KEY_FILE = "Private.key";
-	
+/*	
 	public static void main(String[] args) throws IOException {
 
 		try {
@@ -90,6 +90,7 @@ public class RSAalgorithm {
 		}
 
 	}
+        */
 	
 	/**
 	 * Save Files
@@ -98,7 +99,7 @@ public class RSAalgorithm {
 	 * @param exp
 	 * @throws IOException
 	 */
-	private void saveKeys(String fileName,BigInteger mod,BigInteger exp) throws IOException{
+	public void saveKeys(String fileName,BigInteger mod,BigInteger exp) throws IOException{
 		FileOutputStream fos = null;
 		ObjectOutputStream oos = null;
 		
@@ -130,10 +131,10 @@ public class RSAalgorithm {
 	 * @param data
 	 * @throws IOException
 	 */
-	private byte[] encryptData(String data) throws IOException {
-		System.out.println("\n----------------ENCRYPTION STARTED------------");
+	public byte[] encryptData(String data) throws IOException {
+		//System.out.println("\n----------------ENCRYPTION STARTED------------");
 		
-		System.out.println("Data Before Encryption :" + data);
+		//System.out.println("Data Before Encryption :" + data);
 		byte[] dataToEncrypt = data.getBytes();
 		byte[] encryptedData = null;
 		try {
@@ -141,13 +142,13 @@ public class RSAalgorithm {
 			Cipher cipher = Cipher.getInstance("RSA");
 			cipher.init(Cipher.ENCRYPT_MODE, pubKey);
 			encryptedData = cipher.doFinal(dataToEncrypt);
-			System.out.println("Encryted Data: " + encryptedData);
+			//System.out.println("Encryted Data: " + encryptedData);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	
 		
-		System.out.println("----------------ENCRYPTION COMPLETED------------");		
+		//System.out.println("----------------ENCRYPTION COMPLETED------------");		
 		return encryptedData;
 	}
 
@@ -156,8 +157,8 @@ public class RSAalgorithm {
 	 * @param data
 	 * @throws IOException
 	 */
-	private void decryptData(byte[] data) throws IOException {
-		System.out.println("\n----------------DECRYPTION STARTED------------");
+	public void decryptData(byte[] data) throws IOException {
+		//System.out.println("\n----------------DECRYPTION STARTED------------");
 		byte[] descryptedData = null;
 		
 		try {
@@ -165,13 +166,13 @@ public class RSAalgorithm {
 			Cipher cipher = Cipher.getInstance("RSA");
 			cipher.init(Cipher.DECRYPT_MODE, privateKey);
 			descryptedData = cipher.doFinal(data);
-			System.out.println("Decrypted Data: " + new String(descryptedData));
+			//System.out.println("Decrypted Data: " + new String(descryptedData));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	
 		
-		System.out.println("----------------DECRYPTION COMPLETED------------");		
+		//System.out.println("----------------DECRYPTION COMPLETED------------");		
 	}
 	
 	/**
