@@ -1,7 +1,83 @@
 #https://gist.github.com/JonCooperWorks/5314103
 
 import datetime
+import random
+import math
 
+'''
+Algorithm used to get different prime numbers. 
+
+
+
+'''
+#10 ** 100, 10 ** 101,
+# a , b
+def newKey(a, b):
+        ''' Try to find two large pseudo primes roughly between a and b.
+        Generate public and private keys for RSA encryption.
+        Raises ValueError if it fails to find one'''
+        try:
+            p = findAPrime(a, b, 50)
+            while True:
+                q = findAPrime(a, b, 50)
+                if q != p:
+                    break
+        except:
+            raise ValueError
+        n = p * q
+
+
+
+def findAPrime(a, b, k):
+    '''Return a pseudo prime number roughly between a and b,
+    (could be larger than b). Raise ValueError if cannot find a
+    pseudo prime after 10 * ln(x) + 3 tries. '''
+    x = random.randint(a, b)
+    for i in range(0, int(10 * math.log(x) + 3)):
+        if millerRabin(x, k):
+            return x
+        else:
+            x += 1
+    raise ValueError
+
+
+def millerRabin(n, k):
+    '''
+    Miller Rabin pseudo-prime test
+    return True means likely a prime, (how sure about that, depending on k)
+    return False means definitely a composite.
+    Raise assertion error when n, k are not positive integers
+    and n is not 1
+    '''
+    assert n >= 1
+    # ensure n is bigger than 1
+    assert k > 0
+    # ensure k is a positive integer so everything down here makes sense
+
+    if n == 2:
+        return True
+    # make sure to return True if n == 2
+
+    if n % 2 == 0:
+        return False
+    # immediately return False for all the even numbers bigger than 2
+
+    extract2 = extractTwos(n - 1)
+    s = extract2[0]
+    d = extract2[1]
+    assert 2 ** s * d == n - 1
+
+def extractTwos(m):
+    '''m is a positive integer. A tuple (s, d) of integers is returned
+    such that m = (2 ** s) * d.'''
+    # the problem can be break down to count how many '0's are there in
+    # the end of bin(m). This can be done this way: m & a stretch of '1's
+    # which can be represent as (2 ** n) - 1.
+    assert m >= 0
+    i = 0
+    while m & (2 ** i) == 0:
+        i += 1
+    return (i, m >> i)
 
 '''
 Euclid's algorithm for finding the multiplicative inverse of two numbers
@@ -111,7 +187,35 @@ def getED(n,z):
             return e,d
         e+=1
 
+def int2baseTwo(x):
+    '''x is a positive integer. Convert it to base two as a list of integers
+    in reverse order as a list.'''
+    # repeating x >>= 1 and x & 1 will do the trick
+    assert x >= 0
+    bitInverse = []
+    while x != 0:
+        bitInverse.append(x & 1)
+        x >>= 1
+    return bitInverse
 
+def modExp(a, d, n):
+    '''returns a ** d (mod n)'''
+    # a faster algorithms discussed in CIT 592 class
+    assert d >= 0
+    assert n >= 0
+    base2D = int2baseTwo(d)
+    base2DLength = len(base2D)
+    modArray = []
+    result = 1
+    for i in range(1, base2DLength + 1):
+        if i == 1:
+            modArray.append(a % n)
+        else:
+            modArray.append((modArray[i - 2] ** 2) % n)
+    for i in range(0, base2DLength):
+        if base2D[i] == 1:
+            result *= base2D[i] * modArray[i]
+    return result % n
 
 def generate_keypair(p, q):
     # p and q should be not equal, prime numbers
@@ -143,7 +247,14 @@ def decrypt(pk, ciphertext):
     # Unpack the key into its components
     key, n = pk
     # Generate the plaintext based on the ciphertext and key using a^b mod m
-    plain = [chr((char ** key) % n) for char in ciphertext]
+    #plain = [chr((char ** key) % n) for char in ciphertext]
+    '''modExp(a, d, n):
+            returns a ** d (mod n)     ---->    mod(char,key,n) '''
+    # plain = [chr(modExp(char,key,n)) for char in ciphertext]
+    plain = []
+    for char in ciphertext:
+        # plain.append(chr((char ** key) % n))
+        plain.append(chr(modExp(char, key, n)))
     # Return the array of bytes as a string
     return ''.join(plain)
 
@@ -158,26 +269,27 @@ if __name__ == '__main__':
     print("TIME STARTED:", datetime.datetime.now().time())
     start = datetime.datetime.now()
     print("RSA Encrypter/ Decrypter")
+    p = 36568813
+    q = 36568627
     #p = 6073
     #q = 2371
-    p = 821
-    q = 811
+    #p = 821
+    #q = 811
     #message = input("Enter a message to encrypt with your private key: ")
     #message = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     #message = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    message = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-
+    message = "hol"
     print("My original message is:",message)
     print("Generating your public/private keypairs now . . .")
     public, private = generate_keypair(p, q)
     print("Your public key is ", public, " and your private key is ", private)
     print("Number of bytes in the message:",utf8len(message))
-    encrypted_msg = encrypt(private, message)
+    encrypted_msg = encrypt(public, message)
     print("Your encrypted message is: ")
     print(''.join(map(lambda x: str(x), encrypted_msg)))
     print("Decrypting message with public key ", public, " . . .")
     print("Your message is:")
-    print(decrypt(public, encrypted_msg))
+    print(decrypt(private, encrypted_msg))
     print("TIME FINISHED:",datetime.datetime.now().time())
     end = (datetime.datetime.now()) - start
 
