@@ -270,7 +270,8 @@ def decrypt(pk, ciphertext):
     #plain = [chr(modExp(char,key,n)) for char in ciphertext]
     plain = []
     for char in ciphertext:
-        plain.append(chr((char ** key) % n))
+        #plain.append(chr((char ** key) % n))
+        plain.append(chr(modExp(char,key,n)))
     #plain = [chr((char ** key) % n) for char in ciphertext]
     # Return the array of bytes as a string
     return ''.join(plain)

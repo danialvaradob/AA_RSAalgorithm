@@ -346,7 +346,7 @@ if __name__ == '__main__':
     print('e = {0}'.format(e))
     print('d = {0}'.format(d))
     #message = '''We were the Leopards, the Lions, those who'll take our place will be little jackals, hyenas; But we'll go on thinking ourselves the salt of the earth.'''
-    message = "Hola me llamo Daniel Alvarado"
+    message = "Hola me llamo Daniel AlvaradoB"
     print(message)
     cipher = encrypt(message, n, e, 15)
     print(cipher)
