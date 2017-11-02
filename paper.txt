@@ -1,0 +1,138 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{blindtext, graphicx}
+\usepackage[english]{babel}
+\usepackage{skmath}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{enumerate}
+\begin{document}
+\title{Cryptography: RSA Algorithm}
+\author{\IEEEauthorblockN{Daniel Alvarado Bonilla}
+\IEEEauthorblockA{Technological Institute of Costa Rica\\Computer Engineering\\
+2014089192\\
+Email: daniel.alvarado.bonilla@gmail.com}
+\and
+\IEEEauthorblockN{Roberto Rojas Segnini}
+\IEEEauthorblockA{Technological Institute of Costa Rica\\Computer Engineering\\
+2016139072\\
+Email: rojassegniniroberto@gmail.com}
+}
+\maketitle
+\begin{abstract}
+%\boldmath
+%\blindtext[1]
+ACA VA EL ABSTRACT
+\end{abstract}
+\begin{IEEEkeywords}
+Big O Permutations.
+\end{IEEEkeywords}
+\section{Introduction}
+The increasing growth of the Internet have brought the issue of privacy in electronic communication. Big volumes of private information are transmitted via electronic devices day. The possibility that another person can intercept, someway, somehow that data that is being sent is high. This is the reason why data should be encrypted, to ensure confidentiality and security of files, in other words knowledge.\newline
+Encryption is the average method for making a message that is being communicated private. Anyone wanting to send a confidential message to another user encrypts the message before transmitting it. Only the intended recipient knows how to properly decrypt the message. Any person who was "spying" on the conversation would only see the encrypted message. Because they would not know how to decrypt it, the message would make no sense.This way privacy is devise.\newline The RSA, named after the three MIT profesors who invented the algorithm, Ron Rivest, Adi Shamir and Leonard Adleman. This algorithm was floor breaking at that time because of prime factorization. The Fundamental Theorem of Arithmetic states that any number greater then $1$ can be written in exactly one way using two prime numbers. The reason this one of the most public encryption algorithm is because $n$, a large integer used in the algorithm later explained, is a product of two prime numbers, which are truly hard to obtain. In other words RSA derives its security because of the difficulty of factoring large integers that are the product of two large prime numbers.
+
+\section{Methodology}
+The algorithm to create the public and private keys is structure the next way:
+\begin{enumerate}
+    \item Choose two very large random prime integers: say $p$ and $q$
+    \item Compute $n$ and $φ(n)$: $n = pq$ and $φ(n) = (p-1)(q-1)$ $φ(n)$ is Euler’s Totient Function. 
+    \item Choose an integer $e$, $1 < e < φ(n)$ such that:
+        $gcd(e, φ(n)) = 1$ (where gcd means greatest common denominator)
+    \item Compute $d$, $1 < d < φ(n)$ such that:
+        $ed ≡ 1 (mod φ(n))$ in other words $a*d = $
+\end{enumerate}
+RSA encrypts "messages" of limited size, the maximum size of data which can be encrypted with RSA is $245$ bytes. No more. \newline
+In the following paper, for the experimentation purpose, different implementations of the RSA algorithm will be used.
+If two really big prime numbers are used to encrypt and decrypt, the $d$ exponent, which is the private key, is going to be a massive calculation to do for the computer. Thus, two different ways of solving $(c^d)modn$ will be used in Python programming language. The first approach is a common $c**d$\%$n$ in the 
+
+\section{Pseudocode}
+  \begin{algorithm}
+   \caption{Encrypt RSA algorithm}
+    \begin{algorithmic}[1]
+      \Function{encrypt}{$publicKey[e,n]$,plaintext }\\
+        \State m = plaintext
+        \State ciphertext = $(m^e)modn$
+        \State \Return ciphertext
+       \EndFunction
+\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}
+   \caption{Decrypt RSA algorithm}
+    \begin{algorithmic}[1]
+      \Function{encrypt}{$privateKey[d,n]$,ciphertext }\\
+        \State c = ciphertext
+        \State m = $(c^d)modn$
+        \State plaintext = m
+        \State \Return plaintext
+       \EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+   \caption{Algorithm used for a Faster calculation of }
+    \begin{algorithmic}[1]
+    \Function{modExpo}{$c$,$d$,$n$ }\\
+    \Comment returns c ** d (mod n)\\
+	\State assert $d>= 0$
+	\State assert $n>= 0$
+	\State $base2D$ = $int2baseTwo$($d$) 
+	\State $base2DLength$ = len($base2D$)
+	\State modArray = empty array
+	\State result = $1$
+	\For {i in range of ($1$, base2DLength $+ 1$)}
+	    \If{$i=1$}
+	        \State modArray.append($a$ \% $n$)
+	    \Else
+	        \State modArray.append((modArray$[i - 2] ** 2$) \% $n$)
+	    \EndIf
+	\EndFor
+	\For{ $i$ in range of $base2DLength$}
+	    \If{base2D[i] $= 1$:}
+	        \State result $*=$ base2D[$i$]$*$ modArray[$i$]
+	    \EndIf
+	\EndFor
+	\State \Return result \% $n$
+    \EndFunction
+\end{algorithmic}
+\end{algorithm}
+  \begin{algorithm}
+   \caption{$x$ is a positive integer. Convert it to base two as a list of integers
+    in reverse order as a list.}
+    \begin{algorithmic}[1]
+    \Function{$int2baseTwo$}{$x$ }\\
+        \State assert $x>= 0$
+        \State bitInverse = empty array
+        \While{$x \ne 1$ }
+            \State bitInverse.append($x$ \& $1$)
+            \State x >> $=1$
+        \EndWhile
+        \State \Return bitInverse
+    \EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\section{Algorithm Complexity}
+Big O, $O(f(n))$ of the RSA algorithm:\\
+Este algoritmo tiene en s\'i bastantes funciones  pequeñas. Cada una siendo fundamental para la funci\'on de poda. Las m\'as relevantes se explicar\'an a continuaci\'on son:\\
+$O(n^k)$
+
+
+\section{Experiments}
+\section{Discussion}
+
+
+
+\begin{thebibliography}{1}
+
+\bibitem{IEEEhowto:kopka}
+H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+
+\end{thebibliography}
+
+
+\end{document}

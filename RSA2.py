@@ -258,6 +258,8 @@ def newKey(a, b, k):
                 break
     except:
         raise ValueError
+    print (p)
+    print(q)
     n = p * q
     m = (p - 1) * (q - 1)
     while True:

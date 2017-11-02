@@ -3,6 +3,8 @@
 import datetime
 import random
 import math
+from math import log
+import time
 
 '''
 Algorithm used to get different prime numbers. 
@@ -242,6 +244,22 @@ def encrypt(pk, plaintext):
     # Return the array of bytes
     return cipher
 
+def encryptBytes(pk,plaintext):
+    key,n = pk
+    cipher = (plaintext**key) % n
+    return cipher
+
+def decryptBytes(pk,ciphertext):
+    key, n = pk
+    plaintext = modExp(ciphertext, key, n)
+    return plaintext
+
+def slow_decrypt(pk,ciphertext):
+    key, n = pk
+    # Generate the plaintext based on the ciphertext and key using a^b mod m
+    plain = [chr((char ** key) % n) for char in ciphertext]
+    # Return the array of bytes as a string
+    return ''.join(plain)
 
 def decrypt(pk, ciphertext):
     # Unpack the key into its components
@@ -265,7 +283,162 @@ Returns the number of bytes in a string
 def utf8len(s):
     return len(s.encode('utf-8'))
 
+
+
+def bytes_needed(n):
+    if n == 0:
+        return 1
+    return int(log(n, 256)) + 1
+
+def get_digits_amount(n):
+    c = 0
+    while n > 0:
+        n = n//10
+        c+=1
+    return c
+
+
+def baseMainSlowDecryp(message,loops):
+    print("SLOW RSA Encrypter/ Decrypter")
+    # p = 36568813
+    # q = 36568627
+    #p = 28724974744256171210604537402133690870051111739655285872546166668885450610413079893885519106791870497
+    #q = 28554857743402135305774283412588218725858350542800965497651716463331429073144765255158593070598092153
+    #p = 11
+    #q = 5
+    p = 53
+    q = 61
+    c = 0
+    for i in message:
+        c += 1
+    print("Amount of chars", c)
+    # print("Amount of Bytes:",bytes_needed(message))
+    start = time.process_time()
+    for i in range(loops):
+        public, private = generate_keypair(p, q)
+        encrypted_msg = encrypt(public, message)
+        slow_decrypt(private, encrypted_msg)
+    end = (time.process_time()) - start
+    print("TOTAL TIME:", end)
+
+
+def baseMainSmallPrimes(message,loops):
+    print("RSA Encrypter/ Decrypter")
+    # p = 36568813
+    # q = 36568627
+    p = 53
+    q = 61
+    c = 0
+    for i in message:
+        c+=1
+    print("Amount of chars",c)
+    #print("Amount of Bytes:",bytes_needed(message))
+    start = time.process_time()
+    for i in range(loops):
+        public, private = generate_keypair(p, q)
+        encrypted_msg = encrypt(public, message)
+        decrypt(private, encrypted_msg)
+    end = (time.process_time()) - start
+    print("TOTAL TIME:", end)
+    print("AVG TIME:", (end /loops))
+
+def baseMain(message,loops):
+    print("RSA Encrypter/ Decrypter")
+    # p = 36568813
+    # q = 36568627
+    p = 28724974744256171210604537402133690870051111739655285872546166668885450610413079893885519106791870497
+    q = 28554857743402135305774283412588218725858350542800965497651716463331429073144765255158593070598092153
+    c = 0
+    for i in message:
+        c+=1
+    print("Amount of chars",c)
+    #print("Amount of Bytes:",bytes_needed(message))
+    start = time.process_time()
+    for i in range(loops):
+        public, private = generate_keypair(p, q)
+        encrypted_msg = encrypt(public, message)
+        decrypt(private, encrypted_msg)
+    end = (time.process_time()) - start
+    print("TOTAL TIME:", end)
+    print("AVG TIME:", (end /loops))
+
+
+def main(message):
+    print("TIME STARTED:", datetime.datetime.now().time())
+    print(datetime.datetime.now().time())
+    print("RSA Encrypter/ Decrypter")
+    # p = 53
+    # q = 61
+    p = 28724974744256171210604537402133690870051111739655285872546166668885450610413079893885519106791870497
+    q = 28554857743402135305774283412588218725858350542800965497651716463331429073144765255158593070598092153
+    # message = "Message sent so the experiment can be made, there should be more bytes.\
+    #          47 bytes is not enough.five.Message sent so the experiment can be made, there should be more bytes. 47 bytes is not enough.five."
+    # print("My original message is:",message)
+    print("Generating your public/private keypairs now . . .")
+    public, private = generate_keypair(p, q)
+    print("Your public key is ", public, " and your private key is ", private)
+    print("Number of bytes in the message:", utf8len(message))
+    encrypted_msg = encrypt(public, message)
+    print("Your encrypted message is: ")
+    print(''.join(map(lambda x: str(x), encrypted_msg)))
+    print("Decrypting message with public key ", public, " . . .")
+    print("Your message is:")
+    print(decrypt(private, encrypted_msg))
+    print("TIME FINISHED:", datetime.datetime.now().time())
+
+
+def only_one_encrypt(message):
+    print("RSA Encrypter/ Decrypter")
+    # p = 36568813
+    # q = 36568627
+    p = 28724974744256171210604537402133690870051111739655285872546166668885450610413079893885519106791870497
+    q = 28554857743402135305774283412588218725858350542800965497651716463331429073144765255158593070598092153
+    if (p*q < m):
+        print("WONT WORK")
+    #print(get_digits_amount(q))
+    #message = 2855485774340213530577428341258821872585835054280096549765171646333142907314476525515859307059809215328554857743402135305774283412588218725858350542800965497651716463331429073144765255158593070598092153
+    print("Amount of Digits:", get_digits_amount(m))
+    #start = datetime.datetime.now()
+    start = time.process_time()
+    for i in range(100):
+        public, private = generate_keypair(p, q)
+        encrypted_msg = encryptBytes(public, message)
+        k = decryptBytes(private, encrypted_msg)
+    if k == m:
+        print("SUCCESS")
+    end = (time.process_time() ) - start
+    print("TOTAL TIME:", end)
+    print("AVG TIME:", (end / 100))
+
+
+
 if __name__ == '__main__':
+    #m = 28554857743402135305774283412588218725858350542800965497651716463331429073144765255158593070598095497651716463331429073144765255158593070598092153285548577434021353057742834125882187258583505428009654976517164633314290731447652551585930705980921532855485774340213530577428341258821872585835054280096549765171646333142907314476525515859307059809215328554857743402135305774283412588218725858350542800965497651716463331429073144765255158593070598092153652551585930705980921532855485774340213530577428341258821872585835054280096549765171646333142907314476447652551585935255158593070598092153
+    #m = 55158593070598092153652551585930705980921532855485774340213530577428341258821872585835054280096549765171646333142907314476447652551585935255158593070598092153
+    #m = 35054280096549765171646333142907314476447652551585935255158593070598092153
+    
+    m = 12345
+    print("USING A LITTLE BIGER BUT SMAL PRIME NUMBERS TO ENCRYPT AND DECRYPT",53,61)
+    print("\n")
+    #only_one_encrypt(m)
+    baseMainSlowDecryp("a",100)
+    baseMainSlowDecryp("aaaaaa", 100)
+    baseMainSlowDecryp("aaaaaaaaaaaa", 100)
+    baseMainSlowDecryp("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 100)
+    baseMainSlowDecryp("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 100)
+    baseMainSlowDecryp("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 100)
+    print("----"*10)
+    baseMainSmallPrimes("a", 100)
+    baseMainSmallPrimes("aaaaaa", 100)
+    baseMainSmallPrimes("aaaaaaaaaaaa", 100)
+    baseMainSmallPrimes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 100)
+    baseMainSmallPrimes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 100)
+    baseMainSmallPrimes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                       100)
+
+    message = input("Enter a message to encrypt with your private key: ")
+    main(message)
+'''
     print("TIME STARTED:", datetime.datetime.now().time())
     start = datetime.datetime.now()
     print("RSA Encrypter/ Decrypter")
@@ -275,10 +448,12 @@ if __name__ == '__main__':
     #q = 2371
     #p = 821
     #q = 811
+    #p = 31
+    #q = 57
     #message = input("Enter a message to encrypt with your private key: ")
     #message = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     #message = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    message = "hol"
+    message = "a"
     print("My original message is:",message)
     print("Generating your public/private keypairs now . . .")
     public, private = generate_keypair(p, q)
@@ -295,6 +470,13 @@ if __name__ == '__main__':
 
     print("Microseconds:",end.microseconds)
     print("Seconds:",end.seconds)
+    print("Seconds:",end.seconds)
+
+'''
+
+
+
+
 
 
 
