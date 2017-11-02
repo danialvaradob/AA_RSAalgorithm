@@ -254,7 +254,7 @@ def decryptBytes(pk,ciphertext):
     plaintext = modExp(ciphertext, key, n)
     return plaintext
 
-def slow_decrypt(pk,ciphertext):
+def  slow_decrypt(pk,ciphertext):
     key, n = pk
     # Generate the plaintext based on the ciphertext and key using a^b mod m
     plain = [chr((char ** key) % n) for char in ciphertext]
@@ -306,8 +306,10 @@ def baseMainSlowDecryp(message,loops):
     #q = 28554857743402135305774283412588218725858350542800965497651716463331429073144765255158593070598092153
     #p = 11
     #q = 5
-    p = 53
-    q = 61
+    #p = 53
+    #q = 61
+    p = 821
+    q = 811
     c = 0
     for i in message:
         c += 1
@@ -319,15 +321,18 @@ def baseMainSlowDecryp(message,loops):
         encrypted_msg = encrypt(public, message)
         slow_decrypt(private, encrypted_msg)
     end = (time.process_time()) - start
-    print("TOTAL TIME:", end)
+    #print("TOTAL TIME:", end)
+    print("AVG TIME:", (end / loops))
 
 
 def baseMainSmallPrimes(message,loops):
     print("RSA Encrypter/ Decrypter")
     # p = 36568813
     # q = 36568627
-    p = 53
-    q = 61
+    p = 821
+    q = 811
+    #p = 53
+    #q = 61
     c = 0
     for i in message:
         c+=1
@@ -339,7 +344,7 @@ def baseMainSmallPrimes(message,loops):
         encrypted_msg = encrypt(public, message)
         decrypt(private, encrypted_msg)
     end = (time.process_time()) - start
-    print("TOTAL TIME:", end)
+    #print("TOTAL TIME:", end)
     print("AVG TIME:", (end /loops))
 
 def baseMain(message,loops):
@@ -416,17 +421,17 @@ if __name__ == '__main__':
     #m = 28554857743402135305774283412588218725858350542800965497651716463331429073144765255158593070598095497651716463331429073144765255158593070598092153285548577434021353057742834125882187258583505428009654976517164633314290731447652551585930705980921532855485774340213530577428341258821872585835054280096549765171646333142907314476525515859307059809215328554857743402135305774283412588218725858350542800965497651716463331429073144765255158593070598092153652551585930705980921532855485774340213530577428341258821872585835054280096549765171646333142907314476447652551585935255158593070598092153
     #m = 55158593070598092153652551585930705980921532855485774340213530577428341258821872585835054280096549765171646333142907314476447652551585935255158593070598092153
     #m = 35054280096549765171646333142907314476447652551585935255158593070598092153
-    
+
     m = 12345
     print("USING A LITTLE BIGER BUT SMAL PRIME NUMBERS TO ENCRYPT AND DECRYPT",53,61)
     print("\n")
     #only_one_encrypt(m)
-    baseMainSlowDecryp("a",100)
-    baseMainSlowDecryp("aaaaaa", 100)
-    baseMainSlowDecryp("aaaaaaaaaaaa", 100)
-    baseMainSlowDecryp("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 100)
-    baseMainSlowDecryp("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 100)
-    baseMainSlowDecryp("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 100)
+    baseMainSlowDecryp("a",2)
+    baseMainSlowDecryp("aaaaaa", 2)
+    baseMainSlowDecryp("aaaaaaaaaaaa", 2)
+    baseMainSlowDecryp("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 2)
+    baseMainSlowDecryp("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 2)
+    baseMainSlowDecryp("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 2)
     print("----"*10)
     baseMainSmallPrimes("a", 100)
     baseMainSmallPrimes("aaaaaa", 100)
@@ -436,8 +441,6 @@ if __name__ == '__main__':
     baseMainSmallPrimes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                        100)
 
-    message = input("Enter a message to encrypt with your private key: ")
-    main(message)
 '''
     print("TIME STARTED:", datetime.datetime.now().time())
     start = datetime.datetime.now()
